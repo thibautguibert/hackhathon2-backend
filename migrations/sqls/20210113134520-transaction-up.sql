@@ -1,5 +1,5 @@
 CREATE TABLE transactions(
-   id         INTEGER  NOT NULL PRIMARY KEY 
+   id         INTEGER  NOT NULL PRIMARY KEY
   ,product_id INTEGER  NOT NULL
   ,farmer_id  INTEGER  NOT NULL
   ,buyer_id   INTEGER  NOT NULL
