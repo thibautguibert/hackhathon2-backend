@@ -22,7 +22,7 @@ router.get("/", (req, res) => {
                 if (index > 0 && farmer.id === result[index - 1].id) {
                     let lastFarmerIndex = cities[i].farmers.length - 1;
                     // gestion de la query clients_only
-                    if (clients_only) {
+                    if (clients_only === true) {
                         // si le fermier n'a pas déjà fait une transaction, on l'ajoute
                         if (transaction_id && farmer_id !== cities[i].farmers[lastFarmerIndex].id) {
                             cities[i].farmers.push({
@@ -32,7 +32,7 @@ router.get("/", (req, res) => {
                             });
                         } else {
                             // le fermier a déjà fait une transaction
-                            console.log("ajouter la seconde transaction du fermier")
+                            cities[i].farmers[lastFarmerIndex].products.push(product_id);
                         }
                     } else {
                         // pas de query client_only : si le fermier a déjà fait une transaction
@@ -46,7 +46,7 @@ router.get("/", (req, res) => {
                     }
                     // si ville n'est pas encore dans notre tableau "cities", on la crée
                 } else {
-                    if (clients_only) {
+                    if (clients_only === true) {
                         if (index > 0 && transaction_id) {
                             i++;
                             city.farmers = [
@@ -78,7 +78,9 @@ router.get("/", (req, res) => {
                             {
                                 id: farmer_id,
                                 farm_size: farm_size,
-                                client: transaction_id ? true : false
+                                client: transaction_id ? true : false,
+                                products: [product_id]
+
                             }
                         ];
                         cities.push(city);
