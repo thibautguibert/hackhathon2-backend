@@ -1,6 +1,6 @@
 /* Replace with your SQL commands */
 CREATE TABLE products(
-   id       INTEGER  NOT NULL PRIMARY KEY AUTO_INCREMENT
+   id       INTEGER  NOT NULL PRIMARY KEY
   ,name     VARCHAR(100) NOT NULL
   ,category VARCHAR(100) NOT NULL
 );
