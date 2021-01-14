@@ -96,4 +96,16 @@ router.get("/map", (req, res) => {
     })
 })
 
+router.get("/", (req, res) => {
+    const { zipcode } = req.query;
+    let sql = `SELECT * FROM cities WHERE zipcode = ${zipcode}`;
+    connection.query(sql, (err, result) => {
+        if (err) {
+            res.status(500).json({ error: err.message })
+        } else {
+            res.status(200).json(result)
+        }
+    })
+})
+
 module.exports = router;
