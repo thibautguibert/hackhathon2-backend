@@ -1,6 +1,6 @@
 /* Replace with your SQL commands */
 CREATE TABLE buyers(
-   id      INTEGER  NOT NULL PRIMARY KEY 
+   id      INTEGER  NOT NULL PRIMARY KEY
   ,city_id INTEGER  NOT NULL
   ,name    VARCHAR(100) NOT NULL
   ,type    VARCHAR(100) NOT NULL,
