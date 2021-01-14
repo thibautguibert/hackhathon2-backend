@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const connection = require("../database");
 
-router.get("/", (req, res) => {
+router.get("/map", (req, res) => {
     const { lat1, long1, lat2, long2, clients_only } = req.query;
     let sql = `SELECT c.id, c.city, c.zipcode, c.lat, c.longitude, f.id AS farmer_id, f.farm_size, t.id AS transaction_id, t.product_id
             FROM cities AS c
@@ -22,31 +22,36 @@ router.get("/", (req, res) => {
                 if (index > 0 && farmer.id === result[index - 1].id) {
                     let lastFarmerIndex = cities[i].farmers.length - 1;
                     // gestion de la query clients_only
-                    if (clients_only === true) {
-                        // si le fermier n'a pas déjà fait une transaction, on l'ajoute
+                    if (clients_only === "true") {
+                        // si le fermier actuel est un nouveau fermier et qu'il a fait une transaction
                         if (transaction_id && farmer_id !== cities[i].farmers[lastFarmerIndex].id) {
                             cities[i].farmers.push({
                                 id: farmer_id,
                                 farm_size: farm_size,
-                                client: transaction_id ? true : false
+                                client: transaction_id ? true : false,
+                                products: [product_id]
+
                             });
-                        } else {
-                            // le fermier a déjà fait une transaction
+                        }
+                        else if (transaction_id) {
+                            // le fermier est le même que la transaction d'avant
                             cities[i].farmers[lastFarmerIndex].products.push(product_id);
                         }
                     } else {
-                        // pas de query client_only : si le fermier a déjà fait une transaction
+                        // pas de query client_only : si le fermier est un nouveau fermier
                         if (farmer_id !== cities[i].farmers[lastFarmerIndex].id) {
                             cities[i].farmers.push({
                                 id: farmer_id,
                                 farm_size: farm_size,
-                                client: transaction_id ? true : false
+                                client: transaction_id ? true : false,
+                                products: [product_id]
+
                             });
                         }
                     }
                     // si ville n'est pas encore dans notre tableau "cities", on la crée
                 } else {
-                    if (clients_only === true) {
+                    if (clients_only === "true") {
                         if (index > 0 && transaction_id) {
                             i++;
                             city.farmers = [
@@ -65,7 +70,6 @@ router.get("/", (req, res) => {
                                     farm_size: farm_size,
                                     client: transaction_id ? true : false,
                                     products: [product_id]
-
                                 }
                             ];
                             cities.push(city);
